@@ -46,7 +46,17 @@ class PostOffice:
         user_box = self.boxes[user_name]
         if N == 0 or N > len(user_box):
             N = len(user_box)
-        return [message for index, message in enumerate(user_box) if index < N]
+        return (message for index, message in enumerate(user_box) if index < N)
+
+    def read_message_by_id(self, user_name, message_no):
+        """Read specific message from user inbox.
+
+                :param str user_name: The user name.
+                :param int message_no: The ID of message the user wants to read.
+                :return: The  message of the user inbox
+                """
+        user_box = self.boxes[user_name]
+        return user_box[message_no - 1]
 
     def search_inbox(self, user_name, message_to_search):
         """Read inbox from user inbox.
@@ -58,4 +68,18 @@ class PostOffice:
         user_box = self.boxes[user_name]
         return [message for message in user_box if
                 message_to_search in message.body or message_to_search in message.headline]
+
+
+if __name__ == '__main__':
+    """Main to test the PostOffice Message method.
+    
+    """
+    post_office = PostOffice(["Post Office Manager", "Yaniv"])
+    post_office.send_message("Post Office Manager", "Yaniv", "Post office checking message",
+                             "If you get this message please "
+                             "response to the post office.")
+    print(post_office.read_message_by_id("Yaniv", 1))
+    post_office.send_message("Yaniv", "Post Office Manager", "Post office checking message", "I got the message "
+                                                                                             "everything is fine")
+    print(post_office.read_message_by_id("Post Office Manager", 1))
 
